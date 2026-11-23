@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradicion Xantolo | Máscaras de Madera y Vestuario en la Huasteca</title>
+    
+    <meta name="description" content="Compra máscaras de Xantolo talladas en madera de pemuche, sombreros de palma, chirriones y vestuario tradicional. Envíos a toda la Huasteca.">
+    <meta name="keywords" content="Artesanías Xantolo, Máscaras de Xantolo, Máscaras de madera Huejutla, Vestuario de viejos Xantolo, Cuadrillas Huasteca">
+    <meta name="robots" content="index, follow">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-[#faf8f5] text-stone-800 antialiased min-h-screen flex flex-col">
+
+    <div id="header-container" class="sticky top-0 z-40"></div>
+    <main id="main-view-container" class="flex-1 w-full"></main>
+    <div id="cart-drawer-container"></div>
+    <div id="footer-container" class="w-full"></div>
+
+    <!-- SDK DE EMAILJS PARA CORREOS DE CONFIRMACIÓN -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+    emailjs.init("EGXnD3N8-DF6R-k8C");
+</script>
+
+    <!-- 0. SDK OFICIAL DE PAYPAL (Con tu Client ID y en MXN) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AW0_5x59s82cVxqqWG2LEjpa75LQstkShSCd6xr2jdXaFf73H7OBgP92LfSkXlpwZ-Na322zf946zXqm&currency=MXN"></script>
+    
+
+    <!-- 0.1 SDK OFICIAL DE MERCADO PAGO -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    
+    <!-- 1. Librería de Supabase (Una sola vez) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Conexión a Base de Datos -->
+    <script src="js/db.js?v=7"></script>
+
+    <!-- 3. Componentes -->
+    <script src="components/header.js?v=3"></script>
+    <script src="components/sidebar.js?v=3"></script>
+    <script src="components/footer.js?v=3"></script>
+    
+    <!-- 4. Vistas -->
+    <script src="views/catalogo.js?v=3"></script>
+    <script src="views/carrito.js?v=3"></script>
+    <script src="views/pago.js?v=9"></script>
+    <script src="views/login.js?v=3"></script>
+    <script src="views/registro.js?v=3"></script>
+    <script src="views/misCompras.js?v=1"></script>
+    
+    <!-- 5. App principal -->
+    <script src="js/app.js?v=3"></script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.bg-xantolo-header {
+    background: #ffffff;
+    border-bottom: 3px solid #f97316;
+}
+
+/* Color naranja fuerte asegurado para el banner */
+.bg-papel-picado {
+    background-color: #ea580c; 
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5l5 5h10v10l5 5-5 5v10H35l-5 5-5-5H15V35l-5-5 5-5V15h10l5-5zm0 10l-2.5 2.5v5h-5L20 25v-5h5L27.5 15h5L35 17.5v5h5l-2.5 2.5v5h-5l2.5 2.5h-5L27.5 30h-5l2.5-2.5z' fill='%23ffffff' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+mark.search-highlight {
+    background-color: #f97316 !important;
+    color: #fff !important;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 800;
+}
+
+.ml-product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ml-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(249, 115, 22, 0.25);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f5f5f4; }
+::-webkit-scrollbar-thumb { background: #f97316; border-radius: 4px; }
