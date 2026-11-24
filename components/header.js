@@ -38,9 +38,9 @@ function renderHeader(cartCount = 0, usuarioActual = null) {
                         </div>
                     </a>
 
-                    <button onclick="toggleCartDrawer(true)" class="md:hidden relative text-stone-900 hover:text-orange-500 transition text-2xl">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span id="header-cart-badge-mobile" class="absolute -top-1 -right-2 bg-orange-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-sm border border-white">
+                    <button onclick="toggleCartDrawer(true)" aria-label="Abrir carrito" class="md:hidden relative p-2 text-stone-900 hover:text-orange-500 transition flex items-center justify-center">
+                        <i class="fa-solid fa-cart-shopping text-2xl leading-none"></i>
+                        <span id="header-cart-badge-mobile" class="absolute -top-0.5 -right-0.5 bg-orange-500 text-white text-[10px] leading-none font-black min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center shadow-sm border-2 border-white">
                             ${cartCount}
                         </span>
                     </button>

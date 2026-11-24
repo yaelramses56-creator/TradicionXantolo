@@ -7,15 +7,15 @@ function renderCartDrawer(carrito = [], abierto = false) {
     container.innerHTML = `
         <div class="${abierto ? 'fixed' : 'hidden'} inset-0 z-50 overflow-hidden">
             <div onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
-            <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-                <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-stone-200">
+            <div class="fixed inset-y-0 right-0 w-[90vw] sm:w-full max-w-md flex">
+                <div class="w-full h-full bg-white shadow-2xl flex flex-col justify-between border-l border-stone-200">
                     
-                    <div class="p-5 bg-stone-100 flex items-center justify-between border-b-2 border-orange-500">
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-cart-shopping text-orange-500 text-xl"></i>
-                            <h2 class="font-black text-lg text-black">Tu Carrito de Xantolo (${carrito.reduce((a, b) => a + b.cantidad, 0)})</h2>
+                    <div class="p-4 sm:p-5 bg-stone-100 flex items-center justify-between gap-3 border-b-2 border-orange-500 shrink-0">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-cart-shopping text-orange-500 text-xl shrink-0"></i>
+                            <h2 class="font-black text-base sm:text-lg text-black truncate">Tu Carrito de Xantolo (${carrito.reduce((a, b) => a + b.cantidad, 0)})</h2>
                         </div>
-                        <button onclick="toggleCartDrawer(false)" class="text-stone-500 hover:text-orange-600 text-xl transition">
+                        <button onclick="toggleCartDrawer(false)" aria-label="Cerrar carrito" class="w-9 h-9 rounded-lg bg-white border border-stone-300 text-stone-700 hover:text-orange-600 hover:border-orange-400 flex items-center justify-center text-lg shrink-0 transition">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
