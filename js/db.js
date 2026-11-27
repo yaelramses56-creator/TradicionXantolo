@@ -80,28 +80,14 @@ async function procesarVenta(datosEnvio, carrito, total, metodoPago = 'PayPal Sa
 
         if (detalleError) throw detalleError;
 
-        // 4. Descontar stock en 'productos'
+        // 4. Descontar stock en 'productos' mediante función segura (RPC)
         for (const item of carrito) {
-            const { data: prodActual } = await supabaseClient
-                .from('productos')
-                .select('stock, vendidos')
-                .eq('id', item.id)
-                .single();
+            const { error: stockError } = await supabaseClient.rpc('descontar_stock_producto', {
+                p_producto_id: item.id,
+                p_cantidad: item.cantidad
+            });
 
-            if (prodActual) {
-                const nuevoStock = Math.max(0, (Number(prodActual.stock) || 0) - item.cantidad);
-                const nuevosVendidos = (Number(prodActual.vendidos) || 0) + item.cantidad;
-                const nuevoEstado = nuevoStock > 0 ? 'en existencia' : 'sin existencia';
-
-                await supabaseClient
-                    .from('productos')
-                    .update({
-                        stock: nuevoStock,
-                        vendidos: nuevosVendidos,
-                        estado: nuevoEstado
-                    })
-                    .eq('id', item.id);
-            }
+            if (stockError) throw stockError;
         }
 
         // 5. Actualizar memoria local de la tienda
@@ -118,36 +104,24 @@ async function procesarVenta(datosEnvio, carrito, total, metodoPago = 'PayPal Sa
 // --- 3. FUNCIONES DE AUTENTICACIÓN ---
 async function registrarUsuarioDB(email, password, nombreCompleto) {
     try {
-        // Funciona en localhost/TradicionXantolo/ y también cuando subas a GitHub Pages
         const urlRedireccion = `${window.location.origin}${window.location.pathname}`;
 
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,
             password: password,
             options: {
-                emailRedirectTo: urlRedireccion
+                emailRedirectTo: urlRedireccion,
+                data: {
+                    nombre_completo: nombreCompleto
+                }
             }
         });
         if (error) throw error;
 
-        // Evita falso positivo si el correo ya estaba registrado
         if (data.user && data.user.identities && data.user.identities.length === 0) {
             return { exito: false, mensaje: "Este correo ya está registrado. Intenta iniciar sesión." };
         }
 
-        if (data.user) {
-            const { error: errorCliente } = await supabaseClient
-                .from('clientes')
-                .insert([{
-                    id: data.user.id,
-                    nombre_completo: nombreCompleto,
-                    correo_electronico: email
-                }]);
-            
-            if (errorCliente) console.error("Error al guardar cliente:", errorCliente);
-        }
-
-        // Garantiza que NO quede una sesión abierta tras registrarse
         if (data.session) {
             await supabaseClient.auth.signOut();
         }
@@ -157,7 +131,6 @@ async function registrarUsuarioDB(email, password, nombreCompleto) {
         return { exito: false, mensaje: error.message };
     }
 }
-
 async function iniciarSesionDB(email, password) {
     try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({
