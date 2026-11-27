@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://yaelramses56-creator.github.io/TradicionXantolo/sitemap.xml

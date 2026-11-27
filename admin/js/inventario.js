@@ -105,7 +105,133 @@ function validarArchivoImagen(archivo) {
     return { valido: true, extension };
 }
 
+function convertirImagenAWebP(archivo, calidad = 0.85) {
+    return new Promise((resolve) => {
+        if (archivo.type === 'image/webp') {
+            resolve(archivo);
+            return;
+        }
+
+        const lector = new FileReader();
+        lector.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const maxAncho = 1200;
+                const escala = img.width > maxAncho ? maxAncho / img.width : 1;
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.width * escala);
+                canvas.height = Math.round(img.height * escala);
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        resolve(archivo);
+                        return;
+                    }
+                    const archivoWebP = new File([blob], `optimizada_${Date.now()}.webp`, {
+                        type: 'image/webp',
+                        lastModified: Date.now()
+                    });
+                    resolve(archivoWebP);
+                }, 'image/webp', calidad);
+            };
+            img.onerror = () => resolve(archivo);
+            img.src = e.target.result;
+        };
+        lector.onerror = () => resolve(archivo);
+        lector.readAsDataURL(archivo);
+    });
+}
+
 async function subirImagenBucket(archivo) {
+    const validacion = validarArchivoImagen(archivo);
+    if (!validacion.valido) {
+        throw new Error(validacion.mensaje);
+    }
+
+    const archivoOptimizado = await convertirImagenAWebP(archivo);
+    const extensionFinal = archivoOptimizado.type === 'image/webp' ? 'webp' : validacion.extension;
+    const sufijo = Math.random().toString(36).slice(2, 8);
+    const nombreArchivo = `prod_${Date.now()}_${sufijo}.${extensionFinal}`;
+
+    const { error } = await supabaseAdmin.storage
+        .from('imagenes-productos')
+        .upload(nombreArchivo, archivoOptimizado, {
+            cacheControl: '3600',
+            contentType: archivoOptimizado.type,
+            upsert: false
+        });
+
+    if (error) throw error;
+
+    const { data: urlData } = supabaseAdmin.storage
+        .from('imagenes-productos')
+        .getPublicUrl(nombreArchivo);
+
+    return urlData.publicUrl;
+}
+
+function generarYDescargarSitemapXML() {
+    const baseUrl = "https://yaelramses56.github.io/TradicionXantolo";
+    const hoy = new Date().toISOString().split("T")[0];
+
+    const slugify = (txt) => String(txt)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
+
+    const escaparXML = (txt) => String(txt || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+
+    const categoriasUnicas = [...new Set(inventarioLocal.map(p => p.categoria).filter(Boolean))];
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+    xml += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
+
+    // Página principal
+    xml += `  <url>\n    <loc>${baseUrl}/</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+
+    // Rutas amigables de categorías activas en BD
+    categoriasUnicas.forEach(cat => {
+        xml += `  <url>\n    <loc>${baseUrl}/#/catalogo/${slugify(cat)}</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+    });
+
+    // Productos dinámicos con metadatos de imagen
+    inventarioLocal.forEach(prod => {
+        xml += `  <url>\n`;
+        xml += `    <loc>${baseUrl}/#/catalogo/${slugify(prod.categoria || 'productos')}?item=${prod.id}</loc>\n`;
+        xml += `    <lastmod>${hoy}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        if (prod.imagen) {
+            xml += `    <image:image>\n`;
+            xml += `      <image:loc>${escaparXML(prod.imagen)}</image:loc>\n`;
+            xml += `      <image:title>${escaparXML(prod.title || prod.nombre)}</image:title>\n`;
+            xml += `      <image:caption>${escaparXML(prod.alt || prod.nombre)}</image:caption>\n`;
+            xml += `    </image:image>\n`;
+        }
+        xml += `  </url>\n`;
+    });
+
+    xml += `</urlset>`;
+
+    const blob = new Blob([xml], { type: "application/xml;charset=utf-8" });
+    const enlace = document.createElement("a");
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = "sitemap.xml";
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
+}
     const validacion = validarArchivoImagen(archivo);
     if (!validacion.valido) {
         throw new Error(validacion.mensaje);

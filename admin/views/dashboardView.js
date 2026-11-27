@@ -208,14 +208,20 @@ function renderAdminDashboard(emailAdmin) {
                     </div>
 
                     <!-- COLUMNA DERECHA: TABLA DE PRODUCTOS -->
-                    <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
-                        <div class="flex items-center justify-between border-b border-stone-200 pb-4 mb-4">
-                            <h2 class="text-lg font-black text-stone-900">Catálogo Actual en Supabase</h2>
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-4 mb-4">
+                        <h2 class="text-lg font-black text-stone-900">Catálogo Actual en Supabase</h2>
+                        <div class="flex items-center gap-3">
+                            <button onclick="generarYDescargarSitemapXML()"
+                                class="text-xs font-extrabold bg-stone-900 hover:bg-black text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition shadow-sm"
+                                title="Generar sitemap.xml actualizado con los productos actuales">
+                                <i class="fa-solid fa-sitemap text-orange-400"></i> Sitemap XML
+                            </button>
                             <button onclick="cargarInventarioAdmin()"
                                 class="text-xs font-extrabold text-orange-600 hover:text-orange-700 flex items-center gap-1">
                                 <i class="fa-solid fa-rotate"></i> Actualizar lista
                             </button>
                         </div>
+                    </div>
 
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">

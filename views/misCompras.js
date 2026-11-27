@@ -105,7 +105,7 @@ async function renderVistaMisCompras() {
                                     <div class="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-4 text-xs">
                                         <div class="flex items-center gap-3">
                                             ${item.imagen
-                                                ? `<img src="${item.imagen}" alt="${item.nombre}" class="w-14 h-14 rounded-xl object-cover border border-stone-200">`
+                                                ? `<img src="${item.imagen}" alt="${item.alt || item.nombre}" title="${item.title || item.nombre}" class="w-16 h-16 rounded-lg object-cover border border-stone-300 shrink-0">`
                                                 : `<div class="w-14 h-14 rounded-xl bg-stone-100 flex items-center justify-center text-stone-400"><i class="fa-solid fa-mask"></i></div>`
                                             }
                                             <div>

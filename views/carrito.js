@@ -36,7 +36,7 @@ function renderCartDrawer(carrito = [], abierto = false) {
 
                             return `
                             <div class="py-4 flex gap-3.5 items-center">
-                                <img src="${item.imagen}" alt="${item.alt}" class="w-16 h-16 rounded-lg object-cover border border-stone-300 shrink-0">
+                                <img src="${item.imagen}" alt="${item.alt || item.nombre}" title="${item.title || item.nombre}" class="w-16 h-16 rounded-lg object-cover border border-stone-300 shrink-0">
                                 <div class="flex-1 min-w-0">
                                     <h4 class="text-xs font-black text-black truncate">${item.nombre}</h4>
                                     <p class="text-sm font-black text-orange-600 mt-0.5">$${(item.precio * item.cantidad).toLocaleString('es-MX')} MXN</p>

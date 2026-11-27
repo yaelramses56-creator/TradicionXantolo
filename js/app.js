@@ -9,7 +9,54 @@ const estadoApp = {
     usuarioActual: null // Guarda si el usuario inició sesión
 };
 
+
+const CATEGORIAS_CATALOGO = [
+    "Máscaras de Madera",
+    "Máscaras de Cartonería",
+    "Vestuario de Viejos",
+    "Sombreros y Chirriones",
+    "Kits de Cuadrilla"
+];
+
+function generarSlug(texto) {
+    return String(texto)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
+}
+
+function aplicarRutaDesdeHash() {
+    const hash = window.location.hash.replace(/^#\/?/, "");
+    if (!hash) return;
+
+    if (hash.startsWith("catalogo/")) {
+        const slugCategoria = hash.replace("catalogo/", "");
+        const encontrada = CATEGORIAS_CATALOGO.find(cat => generarSlug(cat) === slugCategoria);
+        estadoApp.vistaActual = "catalogo";
+        estadoApp.filtros.categoria = encontrada || "Todas";
+    } else if (["catalogo", "pago", "login", "registro", "mis-compras"].includes(hash)) {
+        estadoApp.vistaActual = hash;
+    }
+}
+
+function actualizarTituloSEO() {
+    const titulos = {
+        "catalogo": estadoApp.filtros.categoria !== "Todas"
+            ? `${estadoApp.filtros.categoria} | Tradición Xantolo`
+            : "Tradición Xantolo | Máscaras de Madera y Vestuario Huasteco",
+        "pago": "Finalizar Compra Segura | Tradición Xantolo",
+        "mis-compras": "Mis Compras | Tradición Xantolo",
+        "login": "Iniciar Sesión | Tradición Xantolo",
+        "registro": "Crear Cuenta | Tradición Xantolo"
+    };
+    document.title = titulos[estadoApp.vistaActual] || "Tradición Xantolo";
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+    aplicarRutaDesdeHash();
     actualizarInterfazCompleta(); 
     
     // Verificar si el usuario ya había iniciado sesión antes
@@ -19,9 +66,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     actualizarInterfazCompleta();
 });
 
+window.addEventListener("hashchange", () => {
+    aplicarRutaDesdeHash();
+    actualizarInterfazCompleta();
+});
+
 function actualizarInterfazCompleta() {
     const totalItems = estadoApp.carrito.reduce((acc, item) => acc + item.cantidad, 0);
     
+    actualizarTituloSEO();
     renderHeader(totalItems, estadoApp.usuarioActual);
     renderFooter();
 
@@ -62,17 +115,20 @@ function renderVistaCargando() {
 }
 
 // PROTECCIÓN DE RUTAS Y NAVEGACIÓN
-function navegarAVista(nombreVista) {
+function navegarAVista(nombreVista, subSlug = "") {
     if ((nombreVista === "pago" || nombreVista === "mis-compras") && !estadoApp.usuarioActual) {
         alert("¡Hola! Necesitas iniciar sesión para acceder a esta sección.");
         estadoApp.vistaActual = "login";
+        subSlug = "";
     } else {
         estadoApp.vistaActual = nombreVista;
     }
 
+    const rutaFinal = subSlug ? `#/${estadoApp.vistaActual}/${subSlug}` : `#/${estadoApp.vistaActual}`;
+
     // ESCUDO: Evita que el navegador colapse si se abre con doble clic (file:///)
     try {
-        window.history.pushState(null, '', `#/${estadoApp.vistaActual}`);
+        window.history.pushState(null, '', rutaFinal);
     } catch (error) {
         console.warn("Ejecutando en archivo local, URLs amigables pausadas por seguridad.");
     }
@@ -196,8 +252,8 @@ function obtenerProductosFiltrados() {
 
 function filtrarPorCategoria(categoria) {
     estadoApp.filtros.categoria = categoria;
-    estadoApp.vistaActual = "catalogo";
-    actualizarInterfazCompleta();
+    const slug = categoria === "Todas" ? "" : generarSlug(categoria);
+    navegarAVista("catalogo", slug);
 }
 
 function cambiarOrdenProductos(orden) {
@@ -355,7 +411,7 @@ function ejecutarResaltadoYDropdown(query, elements, dropdown) {
             item.className = "p-3 hover:bg-stone-100 cursor-pointer text-xs flex items-center justify-between transition";
             item.innerHTML = `
                 <div class="flex items-center gap-2.5">
-                    <img src="${prod.imagen}" alt="${prod.alt}" class="w-8 h-8 rounded object-cover border border-stone-200">
+                    <img src="${prod.imagen}" alt="${prod.alt || prod.nombre}" title="${prod.title || prod.nombre}" class="w-8 h-8 rounded object-cover border border-stone-200">
                     <div>
                         <p class="font-bold text-black">${prod.nombre}</p>
                         <p class="text-[11px] text-orange-600 font-bold">$${prod.precio} MXN • ${prod.categoria}</p>

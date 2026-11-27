@@ -146,5 +146,52 @@ function renderVistaCatalogo(productosFiltrados, estadoFiltros) {
                 `}
             </div>
         </section>
+<section class="max-w-7xl mx-auto px-4 pb-12">
+            <div class="bg-stone-900 text-white rounded-2xl overflow-hidden border-2 border-orange-500 shadow-xl grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-span-7 bg-black relative flex items-center justify-center">
+                    <video
+                        controls
+                        preload="metadata"
+                        poster="https://itefhoxpwpreztunzeac.supabase.co/storage/v1/object/public/imagenes-productos/prod_1794241517770.jpg"
+                        title="Proceso artesanal de tallado de máscaras de Xantolo en la Huasteca Hidalguense"
+                        aria-label="Video documental sobre el tallado tradicional de máscaras de madera de pemuche y cedro"
+                        class="w-full h-full max-h-[380px] object-cover">
+                        <source src="media/proceso-tallado-xantolo.mp4" type="video/mp4">
+                        Tu navegador no soporta la reproducción de video HTML5.
+                    </video>
+                </div>
+                <div class="lg:col-span-5 p-6 md:p-8 flex flex-col justify-center space-y-4">
+                    <span class="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-orange-400">
+                        <i class="fa-solid fa-film"></i> Patrimonio Cultural Huasteco
+                    </span>
+                    <h2 class="text-2xl font-black leading-tight text-white">
+                        El Arte del Tallado en Madera de Pemuche y Cedro
+                    </h2>
+                    <p class="text-xs md:text-sm text-stone-300 font-medium leading-relaxed">
+                        Conoce cómo los maestros mascareros de Tehuetlán y Chililico transforman la madera en piezas únicas para las comparsas y cuadrillas de viejos durante la fiesta de Xantolo.
+                    </p>
+                    <div class="pt-2 border-t border-stone-800 flex items-center justify-between text-[11px] text-stone-400 font-bold">
+                        <span><i class="fa-solid fa-location-dot text-orange-500 mr-1"></i> Huasteca Hidalguense</span>
+                        <span><i class="fa-regular fa-clock text-orange-500 mr-1"></i> Duración: 01:30 min</span>
+                    </div>
+                </div>
+            </div>
+
+            <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "VideoObject",
+              "name": "El Arte del Tallado en Madera de Pemuche y Cedro - Tradición Xantolo",
+              "description": "Proceso artesanal de tallado de máscaras de viejos y huehues por maestros artesanos de la Huasteca Hidalguense para la celebración de Xantolo.",
+              "thumbnailUrl": [
+                "https://itefhoxpwpreztunzeac.supabase.co/storage/v1/object/public/imagenes-productos/prod_1794241517770.jpg"
+              ],
+              "uploadDate": "2026-11-01T08:00:00-06:00",
+              "duration": "PT1M30S",
+              "contentUrl": "https://yaelramses56-creator.github.io/TradicionXantolo/media/proceso-tallado-xantolo.mp4",
+              "embedUrl": "https://yaelramses56-creator.github.io/TradicionXantolo/#/catalogo"
+            }
+            </script>
+        </section>
     `;
 }
