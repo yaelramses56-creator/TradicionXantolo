@@ -148,17 +148,15 @@ function renderVistaCatalogo(productosFiltrados, estadoFiltros) {
         </section>
 <section class="max-w-7xl mx-auto px-4 pb-12">
             <div class="bg-stone-900 text-white rounded-2xl overflow-hidden border-2 border-orange-500 shadow-xl grid grid-cols-1 lg:grid-cols-12">
-                <div class="lg:col-span-7 bg-black relative flex items-center justify-center">
-                    <video
-                        controls
-                        preload="metadata"
-                        poster="https://itefhoxpwpreztunzeac.supabase.co/storage/v1/object/public/imagenes-productos/prod_1794241517770.jpg"
+                <div class="lg:col-span-7 bg-black relative aspect-video lg:aspect-auto lg:min-h-[340px]">
+                    <iframe
+                        class="w-full h-full"
+                        src="https://www.youtube.com/embed/v05IMmtIxOk"
                         title="Proceso artesanal de tallado de máscaras de Xantolo en la Huasteca Hidalguense"
-                        aria-label="Video documental sobre el tallado tradicional de máscaras de madera de pemuche y cedro"
-                        class="w-full h-full max-h-[380px] object-cover">
-                        <source src="media/proceso-tallado-xantolo.mp4" type="video/mp4">
-                        Tu navegador no soporta la reproducción de video HTML5.
-                    </video>
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
                 </div>
                 <div class="lg:col-span-5 p-6 md:p-8 flex flex-col justify-center space-y-4">
                     <span class="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-orange-400">
@@ -184,12 +182,12 @@ function renderVistaCatalogo(productosFiltrados, estadoFiltros) {
               "name": "El Arte del Tallado en Madera de Pemuche y Cedro - Tradición Xantolo",
               "description": "Proceso artesanal de tallado de máscaras de viejos y huehues por maestros artesanos de la Huasteca Hidalguense para la celebración de Xantolo.",
               "thumbnailUrl": [
-                "https://itefhoxpwpreztunzeac.supabase.co/storage/v1/object/public/imagenes-productos/prod_1794241517770.jpg"
+                "https://img.youtube.com/vi/v05IMmtIxOk/hqdefault.jpg"
               ],
               "uploadDate": "2026-11-01T08:00:00-06:00",
               "duration": "PT1M30S",
-              "contentUrl": "https://yaelramses56-creator.github.io/TradicionXantolo/media/proceso-tallado-xantolo.mp4",
-              "embedUrl": "https://yaelramses56-creator.github.io/TradicionXantolo/#/catalogo"
+              "contentUrl": "https://www.youtube.com/watch?v=v05IMmtIxOk",
+              "embedUrl": "https://www.youtube.com/embed/v05IMmtIxOk"
             }
             </script>
         </section>
